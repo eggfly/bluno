@@ -97,14 +97,11 @@ public class BluetoothLeService extends Service {
                 broadcastUpdate(intentAction);
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
-                if (mBluetoothGatt.discoverServices())
-                {
+                if (mBluetoothGatt.discoverServices()) {
                     Log.i(TAG, "Attempting to start service discovery:");
 
-                }
-                else {
+                } else {
                     Log.i(TAG, "Attempting to start service discovery:not success");
-
                 }
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
@@ -138,12 +135,9 @@ public class BluetoothLeService extends Service {
                     if (mCharacteristicRingBuffer.isEmpty())
                     {
                         mIsWritingCharacteristic = false;
-                    }
-                    else
-                    {
+                    } else {
                         BluetoothGattCharacteristicHelper bluetoothGattCharacteristicHelper = mCharacteristicRingBuffer.next();
-                        if (bluetoothGattCharacteristicHelper.mCharacteristicValue.length() > MAX_CHARACTERISTIC_LENGTH)
-                        {
+                        if (bluetoothGattCharacteristicHelper.mCharacteristicValue.length() > MAX_CHARACTERISTIC_LENGTH) {
                             try {
                                 bluetoothGattCharacteristicHelper.mCharacteristic
                                         .setValue(bluetoothGattCharacteristicHelper.mCharacteristicValue.substring(0,
@@ -164,9 +158,7 @@ public class BluetoothLeService extends Service {
                             }
                             bluetoothGattCharacteristicHelper.mCharacteristicValue = bluetoothGattCharacteristicHelper.mCharacteristicValue
                                     .substring(MAX_CHARACTERISTIC_LENGTH);
-                        }
-                        else
-                        {
+                        } else {
                             try {
                                 bluetoothGattCharacteristicHelper.mCharacteristic
                                         .setValue(bluetoothGattCharacteristicHelper.mCharacteristicValue.getBytes("ISO-8859-1"));
@@ -175,8 +167,7 @@ public class BluetoothLeService extends Service {
                                 throw new IllegalStateException(e);
                             }
 
-                            if (mBluetoothGatt.writeCharacteristic(bluetoothGattCharacteristicHelper.mCharacteristic))
-                            {
+                            if (mBluetoothGatt.writeCharacteristic(bluetoothGattCharacteristicHelper.mCharacteristic)) {
                                 System.out.println("writeCharacteristic init " + new String(
                                         bluetoothGattCharacteristicHelper.mCharacteristic.getValue()) + ":success");
                             } else {
@@ -192,15 +183,11 @@ public class BluetoothLeService extends Service {
                             // System.out.println(mCharacteristicRingBuffer.size());
                         }
                     }
-                }
-                // WRITE a NEW CHARACTERISTIC
-                else if (status == WRITE_NEW_CHARACTERISTIC)
-                {
-                    if ((!mCharacteristicRingBuffer.isEmpty()) && mIsWritingCharacteristic == false)
-                    {
+                } else if (status == WRITE_NEW_CHARACTERISTIC) {
+                    // WRITE a NEW CHARACTERISTIC
+                    if ((!mCharacteristicRingBuffer.isEmpty()) && mIsWritingCharacteristic == false) {
                         BluetoothGattCharacteristicHelper bluetoothGattCharacteristicHelper = mCharacteristicRingBuffer.next();
-                        if (bluetoothGattCharacteristicHelper.mCharacteristicValue.length() > MAX_CHARACTERISTIC_LENGTH)
-                        {
+                        if (bluetoothGattCharacteristicHelper.mCharacteristicValue.length() > MAX_CHARACTERISTIC_LENGTH) {
 
                             try {
                                 bluetoothGattCharacteristicHelper.mCharacteristic
@@ -211,8 +198,7 @@ public class BluetoothLeService extends Service {
                                 throw new IllegalStateException(e);
                             }
 
-                            if (mBluetoothGatt.writeCharacteristic(bluetoothGattCharacteristicHelper.mCharacteristic))
-                            {
+                            if (mBluetoothGatt.writeCharacteristic(bluetoothGattCharacteristicHelper.mCharacteristic)) {
                                 System.out.println("writeCharacteristic init " + new String(
                                         bluetoothGattCharacteristicHelper.mCharacteristic.getValue()) + ":success");
                             } else {
@@ -221,9 +207,7 @@ public class BluetoothLeService extends Service {
                             }
                             bluetoothGattCharacteristicHelper.mCharacteristicValue = bluetoothGattCharacteristicHelper.mCharacteristicValue
                                     .substring(MAX_CHARACTERISTIC_LENGTH);
-                        }
-                        else
-                        {
+                        } else {
                             try {
                                 bluetoothGattCharacteristicHelper.mCharacteristic
                                         .setValue(bluetoothGattCharacteristicHelper.mCharacteristicValue.getBytes("ISO-8859-1"));
@@ -232,8 +216,7 @@ public class BluetoothLeService extends Service {
                                 throw new IllegalStateException(e);
                             }
 
-                            if (mBluetoothGatt.writeCharacteristic(bluetoothGattCharacteristicHelper.mCharacteristic))
-                            {
+                            if (mBluetoothGatt.writeCharacteristic(bluetoothGattCharacteristicHelper.mCharacteristic)) {
                                 System.out.println("writeCharacteristic init " + new String(
                                         bluetoothGattCharacteristicHelper.mCharacteristic.getValue()) + ":success");
                                 // System.out.println((byte)bluetoothGattCharacteristicHelper.mCharacteristic.getValue()[0]);
@@ -260,15 +243,12 @@ public class BluetoothLeService extends Service {
                     mIsWritingCharacteristic = true;
 
                     // clear the buffer to prevent the lock of the mIsWritingCharacteristic
-                    if (mCharacteristicRingBuffer.isFull())
-                    {
+                    if (mCharacteristicRingBuffer.isFull()) {
                         mCharacteristicRingBuffer.clear();
                         mIsWritingCharacteristic = false;
                     }
-                }
-                else
-                // CharacteristicWrite fail
-                {
+                } else {
+                    // CharacteristicWrite fail
                     mCharacteristicRingBuffer.clear();
                     System.out.println("onCharacteristicWrite fail:" + new String(characteristic.getValue()));
                     System.out.println(status);

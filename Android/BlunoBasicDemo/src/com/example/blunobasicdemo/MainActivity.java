@@ -1,8 +1,8 @@
 
 package com.example.blunobasicdemo;
 
-import android.os.Bundle;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -48,6 +48,13 @@ public class MainActivity extends BlunoLibrary {
                 buttonScanOnClickProcess(); // Alert Dialog for selecting the BLE device
             }
         });
+        Button notificationButton = (Button) findViewById(R.id.view_notifications);
+        notificationButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.this.startActivity(new Intent(MainActivity.this, NotificationMonitorActivity.class));
+            }
+        });
     }
 
     protected void onResume() {
@@ -80,8 +87,9 @@ public class MainActivity extends BlunoLibrary {
     }
 
     @Override
-    public void onConectionStateChange(connectionStateEnum theConnectionState) {// Once connection state changes, this
-                                                                                // function will be called
+    public void onConectionStateChange(connectionStateEnum theConnectionState) {
+        // Once connection state changes, this
+        // function will be called
         switch (theConnectionState) { // Four connection state
             case isConnected:
                 buttonScan.setText("Connected");
@@ -104,8 +112,8 @@ public class MainActivity extends BlunoLibrary {
     }
 
     @Override
-    public void onSerialReceived(String theString) { // Once connection data received, this function will be called
-        // TODO Auto-generated method stub
+    public void onSerialReceived(String theString) {
+        // Once connection data received, this function will be called
         serialReceivedText.append(theString); // append the text into the EditText
         // The Serial data from the BLUNO may be sub-packaged, so using a buffer to hold the String is a good choice.
 
